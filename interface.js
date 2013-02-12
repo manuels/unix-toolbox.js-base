@@ -21,7 +21,7 @@
   };
 
 
-  var Base = function(worker_script) {
+  var Interface = function(worker_script) {
     this.worker = new Worker(worker_script);
     this.promises = [];
     var self = this;
