@@ -1,4 +1,4 @@
-(function(exports){
+(function(){
   var Promise = function() {
     var callbacks = [];
     var result = null;
@@ -21,7 +21,7 @@
   };
 
 
-  exports.Base = function{
+  var Base = function(worker_script) {
     this.worker = new Worker(worker_script);
     this.promises = [];
     var self = this;
@@ -139,5 +139,5 @@
 
       return prom;
     }
-  });
-})(window);
+  }
+})();
