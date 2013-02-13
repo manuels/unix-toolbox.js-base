@@ -40,9 +40,9 @@
         self.promises[obj.id].fulfil(obj);
       if(obj.cmd) {
         if(obj.cmd == 'stdout' && typeof(self.on_stdout) === 'function')
-          self.on_stdout(obj.contents)
+          self.on_stdout(obj.contents+'\n')
         if(obj.cmd == 'stderr' && typeof(self.on_stderr) === 'function')
-          self.on_stderr(obj.contents)
+          self.on_stderr(obj.contents+'\n')
       }
     };
 
