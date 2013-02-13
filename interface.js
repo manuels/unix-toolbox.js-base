@@ -49,10 +49,10 @@
 
     this.addUrl = function(real_url, pseudo_path, pseudo_name) {
       var prom = new Promise();
-      this.promises.push(prom);
-      this.worker.postMessage(JSON.stringify({
+      self.promises.push(prom);
+      self.worker.postMessage(JSON.stringify({
         cmd:         'addUrl',
-        id:          (this.promises.length-1),
+        id:          (self.promises.length-1),
         real_url:    real_url,
         pseudo_path: pseudo_path,
         pseudo_name: pseudo_name
@@ -62,12 +62,12 @@
     },
 
 
-    this.mkdir = function(pseudo_path, pseudo_name) {
+    self.mkdir = function(pseudo_path, pseudo_name) {
       var prom = new Promise();
-      this.promises.push(prom);
-      this.worker.postMessage(JSON.stringify({
+      self.promises.push(prom);
+      self.worker.postMessage(JSON.stringify({
         cmd:         'mkdir',
-        id:          (this.promises.length-1),
+        id:          (self.promises.length-1),
         pseudo_path: pseudo_path,
         pseudo_name: pseudo_name
       }));
@@ -76,12 +76,12 @@
     },
 
 
-    this.getFile = function(pseudo_path, pseudo_name) {
+    self.getFile = function(pseudo_path, pseudo_name) {
       var prom1 = new Promise();
-      this.promises.push(prom1);
-      this.worker.postMessage(JSON.stringify({
+      self.promises.push(prom1);
+      self.worker.postMessage(JSON.stringify({
         cmd:         'getFile',
-        id:          (this.promises.length-1),
+        id:          (self.promises.length-1),
         pseudo_path: pseudo_path,
         pseudo_name: pseudo_name
       }));
@@ -111,10 +111,10 @@
 
     this.addData = function(contents, pseudo_path, pseudo_name) {
       var prom = new Promise();
-      this.promises.push(prom);
-      this.worker.postMessage(JSON.stringify({
+      self.promises.push(prom);
+      self.worker.postMessage(JSON.stringify({
         cmd:         'addData',
-        id:          (this.promises.length-1),
+        id:          (self.promises.length-1),
         contents:    contents,
         pseudo_path: pseudo_path,
         pseudo_name: pseudo_name
@@ -125,15 +125,15 @@
 
     this.run = function() {
       var prom = new Promise();
-      this.promises.push(prom);
+      self.promises.push(prom);
 
       var args = [];
       for(var i = 0; i < arguments.length; i++)
         args.push(arguments[i]);
 
-      this.worker.postMessage(JSON.stringify({
+      self.worker.postMessage(JSON.stringify({
         cmd:         'run',
-        id:          (this.promises.length-1),
+        id:          (self.promises.length-1),
         args:        args
       }));
 
