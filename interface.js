@@ -123,6 +123,21 @@
     },
 
 
+    this.addDone = function() {
+      var prom = new Promise();
+
+      var N = this.promises.length;
+      for(var i = 0; i < this.promises.length; i++)
+        this.promises[i].then(function() {
+          N--;
+          if(N == 0)
+            prom.fulfil();
+        });
+
+      return prom;
+    }
+
+
     this.run = function() {
       var prom = new Promise();
       self.promises.push(prom);
