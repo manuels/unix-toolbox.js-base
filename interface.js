@@ -123,7 +123,7 @@
     },
 
 
-    this.addDone = function() {
+    this.allDone = function() {
       var prom = new Promise();
 
       var N = this.promises.length;
