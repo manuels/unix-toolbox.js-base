@@ -127,12 +127,15 @@
       var prom = new Promise();
 
       var N = this.promises.length;
-      for(var i = 0; i < this.promises.length; i++)
+      for(var i = 0; i < this.promises.length; i++) {
         this.promises[i].then(function() {
           N--;
           if(N == 0)
             prom.fulfil();
         });
+      }
+      if(this.promises.length === 0)
+        prom.fulfil();
 
       return prom;
     }
