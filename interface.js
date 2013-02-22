@@ -157,5 +157,8 @@
 
       return prom;
     }
+
+    exports.Interface.Promise = Promise;
+    return this;
   }
 })(window);
