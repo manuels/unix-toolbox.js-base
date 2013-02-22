@@ -4,7 +4,7 @@
     var result = null;
 
     this.then = function(cb) {
-      if(result != null)
+      if(result !== null)
         cb(result);
       else
         callbacks.push(cb);
