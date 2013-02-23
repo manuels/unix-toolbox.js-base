@@ -101,7 +101,7 @@
         }
 
         if(complete) {
-          prom2.fulfil(chunks.join(''));
+          prom2.fulfil(chunks.join(''), pseudo_path, pseudo_name);
         }
       });
 
