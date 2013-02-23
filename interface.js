@@ -12,7 +12,7 @@
       return this;
     };
 
-    this.fulfil = function(arguments) {
+    this.fulfil = function() {
       result = arguments;
       for(var i in callbacks) {
         callbacks[i].apply(this, result);
