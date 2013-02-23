@@ -5,17 +5,17 @@
 
     this.then = function(cb) {
       if(result !== null)
-        cb(result);
+        cb.apply(this, result);
       else
         callbacks.push(cb);
 
       return this;
     };
 
-    this.fulfil = function(res) {
-      result = res;
+    this.fulfil = function(arguments) {
+      result = arguments;
       for(var i in callbacks) {
-        callbacks[i](result);
+        callbacks[i].apply(this, result);
       }
     }
   };
