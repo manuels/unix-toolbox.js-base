@@ -33,6 +33,7 @@
         obj = JSON.parse(ev.data);
       }
       catch(e) {
+        console.log(ev.data);
         return;
       }
 
