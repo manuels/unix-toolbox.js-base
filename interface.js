@@ -125,6 +125,24 @@
     },
 
 
+    self.getFiles = function() {
+      var prom = new Promise();
+      var contents = {};
+
+      var pseudo_files = Array.prototype.slice.call(arguments);
+      for(var i in pseudo_files)
+        (function(fname) {
+          self.getFile(fname).then(function(c) {
+            contents[fname] = c;
+            if(Object.keys(contents).length == pseudo_files.length)
+              prom.fulfil(contents);
+          });
+        })(pseudo_files[i]);
+
+      return prom;
+    }
+
+
     self.getFile = function(pseudo_file) {
       var file = self._analysePath(pseudo_file);
 
