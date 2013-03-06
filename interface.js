@@ -107,18 +107,13 @@
 
 
     self.mkdir = function(pseudo_path) {
-      if(pseudo_path[pseudo_path.length-1] === '/')
-        pseudo_path = pseudo_path.substr(0, pseudo_path.length-1);
-
-      var dir = self._analysePath(pseudo_path);
-
       var prom = new Promise();
       self.promises.push(prom);
       self.worker.postMessage(JSON.stringify({
         cmd:         'mkdir',
         id:          (self.promises.length-1),
-        pseudo_path: dir.path,
-        pseudo_name: dir.filename
+        pseudo_path: '/',
+        pseudo_name: pseudo_path
       }));
 
       return prom;
