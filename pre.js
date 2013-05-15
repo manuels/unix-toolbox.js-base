@@ -1,3 +1,4 @@
+var console = {log: function() {}};
 var is_browser = (typeof(self) !== "undefined" || typeof(window) !== "undefined");
 
 var FS;
@@ -46,17 +47,29 @@ var mkdir = function(id, pseudo_path, pseudo_name) {
 
 
 var getFile = function(id, pseudo_path, pseudo_name) {
-  var array = FS.root.contents[pseudo_name].contents;
-  var binary_data = new Uint8Array(array);
+  try {
+    var parentObj = FS.root;
+    var path = pseudo_path.split('/');
+    for(var i = 1; i < path.length; i++) {
+      if(path[i] != '')
+        parentObj = parentObj.contents[path[i]];
+    }
 
-  var chunk_size = 1000;
-  var chunk_count = Math.ceil(binary_data.length/chunk_size);
+    var array = parentObj.contents[pseudo_name].contents;
+    var binary_data = new Uint8Array(array);
+
+    var chunk_size = 1000;
+    var chunk_count = Math.max(1, Math.ceil(binary_data.length/chunk_size));
   
-  for(var i = 0; i < chunk_count; i++) {
-    var chunk = binary_data.subarray(i*chunk_size, Math.min((i+1)*chunk_size, binary_data.length));
+    for(var i = 0; i < chunk_count; i++) {
+      var chunk = binary_data.subarray(i*chunk_size, Math.min((i+1)*chunk_size, binary_data.length));
 
-    var str_chunk = String['fromCharCode'].apply(null, chunk);
-    self.postMessage(JSON.stringify({'id': id, 'chunk_id': i, 'chunk_count': chunk_count, 'contents': str_chunk}));
+      var str_chunk = String['fromCharCode'].apply(null, chunk);
+      self.postMessage(JSON.stringify({'id': id, 'chunk_id': i, 'chunk_count': chunk_count, 'contents': str_chunk}));
+    }
+  }
+  catch(e) {
+    self.postMessage(JSON.stringify({'id': id, 'chunk_id': 0, 'chunk_count': 0, 'error': true}));
   }
 };
 
@@ -78,6 +91,16 @@ self['onmessage'] = function(ev) {
 
   if(msg['cmd'] === 'run') {
     try {
+      shouldRunNow = true;
+
+      if('egd-pool' in FS.root.contents['dev'].contents) {
+        var rand_count = 0;
+        var rand_contents = FS.root.contents['dev'].contents['egd-pool'].contents;
+        var rand = new Uint8Array(rand_contents);
+        FS.createDevice('/dev', 'urandom', function() { rand_count++; if(rand_count >= rand.length) { Module.print("Out of entropy!"); throw Error("Out of entropy"); } return rand[rand_count-1]; });
+        FS.createDevice('/dev', 'random', function() { rand_count++; if(rand_count >= rand.length) { Module.print("Out of entropy!"); throw Error("Out of entropy"); } return rand[rand_count-1]; });
+      }
+
       Module['run'](msg['args']);
     }
     catch(e) {
